@@ -43,41 +43,63 @@ class Addressbook:
             print(str(i) + " ) Name: " + data[0] + " Number: " + data[1] + " Address: " + data[2])
         readFile.close()
 
-
-def main():
-    print("1) Add Address")
-    print("2) Display All Addresses")
-
-    choice = input("Enter Number of choice : ")
-    address_Obj = Addressbook()
-    if (int(choice) == 1):
-        name = input("Enter New Name: ")
-        number = input("Enter New Number: ")
-        address = input("Enter New Address: ")
-        address_Obj.NewAddressbook(name, number, address)
-
-    elif (int(choice) == 2):
-        address_Obj.DisplayAll()
-
-        Number = input("Enter number to update it : ")
-
-        name = input("Enter New Name: ")
-        number = input("Enter New Number: ")
-        address = input("Enter New Address: ")
-
-        newstr = name + "@" + number + "@" + address
-
+    def DeleteOnIndex(self, Number):
         readFile = open("testfile.txt", "r")
 
         lines = readFile.readlines()
 
         details = [str(e.strip()) for e in lines]
 
-        oldstr = details[int(Number)]
+        del details[int(Number)]  # delete regarding element
 
-        readFile.close()
+        # rewrite the textfile from list contents/elements:
+        with open("testfile.txt", "w") as textobj:
+            for n in details:
+                textobj.write(n + "\n")
 
-        address_Obj.UpdateAddressbook(oldstr, newstr)
+
+def main():
+    while (True):
+        print("1) Add Address")
+        print("2) Display All Addresses")
+        choice = input("Enter Number of choice : ")
+        address_Obj = Addressbook()
+        if (int(choice) == 1):
+            while (True):
+                name = input("Enter New Name: ")
+                number = input("Enter New Number: ")
+                address = input("Enter New Address: ")
+                address_Obj.NewAddressbook(name, number, address)
+                char_choice = input("If Do you want to add again (y/n)? : ")
+                if (str(char_choice) == "n"):
+                    break
+
+        elif (int(choice) == 2):
+            while (True):
+                address_Obj.DisplayAll()
+
+                Number = input("Enter number to update it : ")
+
+                name = input("Enter New Name: ")
+                number = input("Enter New Number: ")
+                address = input("Enter New Address: ")
+
+                newstr = name + "@" + number + "@" + address
+                readFile = open("testfile.txt", "r")
+                lines = readFile.readlines()
+                details = [str(e.strip()) for e in lines]
+                oldstr = details[int(Number)]
+                readFile.close()
+
+                address_Obj.UpdateAddressbook(oldstr, newstr)
+
+                char_choice = input("If Do you want to display again (y/n)? : ")
+                if (str(char_choice) == "n"):
+                    break
+
+        char_choice = input("If Do you want to select again (y/n)? : ")
+        if (str(char_choice) == "n"):
+            break
 
 
 if __name__ == '__main__': main()
